@@ -1,5 +1,6 @@
 package acc.spring.springtdd.controller;
 
+import acc.spring.springtdd.exceptions.DogCustomException;
 import acc.spring.springtdd.model.Dog;
 import acc.spring.springtdd.service.IDogService;
 import lombok.AllArgsConstructor;
@@ -15,12 +16,12 @@ import java.util.List;
 public class DogController {
     private IDogService dogService;
 
-    @GetMapping("/dog/{idDog}")
+    @GetMapping("/{idDog}")
     public ResponseEntity<Dog> getDogById(@PathVariable("idDog") Long idDog){
         System.out.println("ID: "+idDog);
         Dog dog = this.dogService.findById(idDog);
         if(dog==null){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            throw new DogCustomException("Dog does not found, for reading.");
         }
         return ResponseEntity.status(HttpStatus.OK).body(dog);
     }
@@ -28,9 +29,6 @@ public class DogController {
     @GetMapping("/dogs")
     public ResponseEntity<?> getDogs(){
         List<Dog> dogs = this.dogService.findAll();
-        if(dogs==null){
-            return ResponseEntity.status(HttpStatus.BAD_GATEWAY).build();
-        }
         return ResponseEntity.status(HttpStatus.OK).body(dogs);
     }
 
@@ -42,16 +40,15 @@ public class DogController {
 
     @PutMapping("/{idDog}")
     public ResponseEntity<?> postDog(@RequestBody Dog newDog, @PathVariable("idDog") Long idDog){
-        Dog dog;
+
         try {
             Dog updDog = dogService.findById(idDog);
             updDog.setName(newDog.getName());
             updDog.setAge(newDog.getAge());
-            dog = dogService.saveDog(updDog);
+            Dog dog = dogService.saveDog(updDog);
             return  ResponseEntity.status(HttpStatus.OK).body(dog);
         }catch (Exception e){
-            dog = dogService.saveDog(newDog);
-            return  ResponseEntity.status(HttpStatus.CREATED).body(dog);
+            throw new DogCustomException("Dog does not found, for update.");
         }
     }
 
@@ -61,7 +58,7 @@ public class DogController {
             dogService.deleteDog(idDog);
             return  ResponseEntity.status(HttpStatus.OK).build();
         }catch (Exception e){
-            return  ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            throw new DogCustomException("Dog does not found, for deletion.");
         }
     }
 }
