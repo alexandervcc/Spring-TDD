@@ -46,4 +46,9 @@ public class DogServiceImpl  implements  IDogService{
         }
         return true;
     }
+
+    @Override
+    public List<Dog> getDogsByBreed(String dogBreed) {
+        return this.dogRepository.findAllByBreed(dogBreed);
+    }
 }

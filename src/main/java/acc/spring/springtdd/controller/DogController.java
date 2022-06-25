@@ -11,6 +11,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +25,7 @@ import java.util.List;
 @RequestMapping("api/v1/dog")
 public class DogController {
     private IDogService dogService;
+    private final Logger logger = LoggerFactory.getLogger(DogController.class);
 
     @Operation(summary = "Get a Dog by its ID")
     @ApiResponses(value = {
@@ -40,6 +43,7 @@ public class DogController {
         System.out.println("ID: "+idDog);
         Dog dog = this.dogService.findById(idDog);
         if(dog==null){
+            logger.error("Dog doesnt Found.");
             throw new DogCustomException("Dog does not found, for reading.");
         }
         return ResponseEntity.status(HttpStatus.OK).body(dog);
@@ -91,7 +95,6 @@ public class DogController {
     })
     @PutMapping("/{idDog}")
     public ResponseEntity<?> postDog(@RequestBody Dog newDog, @PathVariable("idDog") Long idDog){
-
         try {
             Dog updDog = dogService.findById(idDog);
             updDog.setName(newDog.getName());
@@ -99,6 +102,7 @@ public class DogController {
             Dog dog = dogService.saveDog(updDog);
             return  ResponseEntity.status(HttpStatus.OK).body(dog);
         }catch (Exception e){
+            logger.info("Dog does not found, for update.");
             throw new DogCustomException("Dog does not found, for update.");
         }
     }
@@ -121,7 +125,23 @@ public class DogController {
             dogService.deleteDog(idDog);
             return  ResponseEntity.status(HttpStatus.OK).build();
         }catch (Exception e){
+            logger.info("Dog does not found, for deletion.");
             throw new DogCustomException("Dog does not found, for deletion.");
         }
+    }
+
+    @Operation(summary = "Get List of Dogs by Breed")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "List retrieved",
+                    content = { @Content(
+                            mediaType = "application/json",
+                            array = @ArraySchema(schema = @Schema(implementation = Dog.class))
+                    )}
+            )
+    })
+    @GetMapping("/dogsBy")
+    public ResponseEntity<?> getDogsByBreed(@RequestParam("breed") String dogBreed){
+        List<Dog> dogs = this.dogService.getDogsByBreed(dogBreed);
+        return ResponseEntity.status(HttpStatus.OK).body(dogs);
     }
 }

@@ -22,11 +22,13 @@ public class SpringTddApplication  {
             dogService.saveDog(Dog.builder()
                     .age(5)
                     .name("Manasitas")
+                    .breed("Teckel")
                     .build()
             );
             dogService.saveDog(Dog.builder()
                     .age(7)
                     .name("Cocochitas")
+                    .breed("Schanuzer")
                     .build()
             );
 		};

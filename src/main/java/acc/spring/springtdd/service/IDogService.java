@@ -7,9 +7,8 @@ import java.util.List;
 public interface IDogService {
     List<Dog> findAll();
     Dog findById(Long dogId);
-
     Dog saveDog(Dog newDog);
     void deleteDog(Long deleteDog);
-
-    public Boolean checkDogAlreadyExists(Dog newDog);
+    List<Dog> getDogsByBreed(String dogBreed);
+    Boolean checkDogAlreadyExists(Dog newDog);
 }
