@@ -1,5 +1,7 @@
 package acc.spring.springtdd.exceptions;
 
+import acc.spring.springtdd.exceptions.exception.DogCustomException;
+import acc.spring.springtdd.exceptions.exception.DogExistsException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -21,6 +23,18 @@ public class CustomExceptionHandler {
                 HttpStatus.NOT_FOUND,
                 ZonedDateTime.now(ZoneId.of("Z"))
         );
-        return new ResponseEntity<>(exceptionResponse,HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(exceptionResponse,HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(value = {DogExistsException.class})
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ResponseEntity<ExceptionResponse> handleDogAlreadyExistsException(DogCustomException e){
+        ExceptionResponse exceptionResponse = new ExceptionResponse(
+                e.getMessage(),
+                e,
+                HttpStatus.FORBIDDEN,
+                ZonedDateTime.now(ZoneId.of("Z"))
+        );
+        return new ResponseEntity<>(exceptionResponse,HttpStatus.FORBIDDEN);
     }
 }

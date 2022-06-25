@@ -9,4 +9,6 @@ import java.util.Optional;
 @Repository
 public interface IDogRepository extends JpaRepository<Dog,Long> {
     Optional<Dog> findById(Long dogId);
+
+    Optional<Dog> findDogByNameOrAge(String name, Integer age);
 }

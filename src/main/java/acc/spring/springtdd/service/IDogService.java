@@ -9,6 +9,7 @@ public interface IDogService {
     Dog findById(Long dogId);
 
     Dog saveDog(Dog newDog);
-
     void deleteDog(Long deleteDog);
+
+    public Boolean checkDogAlreadyExists(Dog newDog);
 }

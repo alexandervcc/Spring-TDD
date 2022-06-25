@@ -1,6 +1,6 @@
 package acc.spring.springtdd.controller;
 
-import acc.spring.springtdd.exceptions.DogCustomException;
+import acc.spring.springtdd.exceptions.exception.DogCustomException;
 import acc.spring.springtdd.exceptions.ExceptionResponse;
 import acc.spring.springtdd.model.Dog;
 import acc.spring.springtdd.service.IDogService;
@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -71,7 +72,9 @@ public class DogController {
     @PostMapping("/new")
     public ResponseEntity<?> postDog(@RequestBody Dog newDog){
         Dog dog = this.dogService.saveDog(newDog);
-        return ResponseEntity.status(HttpStatus.CREATED).body(dog);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Result","OK");
+        return ResponseEntity.status(HttpStatus.CREATED).headers(headers).body(dog);
     }
 
     @Operation(summary = "Update an existing Dog")
