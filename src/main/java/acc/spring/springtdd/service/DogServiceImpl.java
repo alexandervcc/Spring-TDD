@@ -1,6 +1,7 @@
 package acc.spring.springtdd.service;
 
 import acc.spring.springtdd.exceptions.exception.DogCustomException;
+import acc.spring.springtdd.exceptions.exception.DogExistsException;
 import acc.spring.springtdd.model.Dog;
 import acc.spring.springtdd.repository.IDogRepository;
 import lombok.AllArgsConstructor;
@@ -26,7 +27,7 @@ public class DogServiceImpl  implements  IDogService{
     @Override
     public Dog saveDog(Dog newDog) {
         if(checkDogAlreadyExists(newDog)){
-           throw new DogCustomException("Dog already exists.");
+           throw new DogExistsException("Dog already exists.");
         }
         return this.dogRepository.save(newDog);
     }
@@ -50,5 +51,10 @@ public class DogServiceImpl  implements  IDogService{
     @Override
     public List<Dog> getDogsByBreed(String dogBreed) {
         return this.dogRepository.findAllByBreed(dogBreed);
+    }
+
+    public String getDogData(Dog dog){
+        String value = dog.getAge()>5 ? "Old: " : "Young: ";
+        return  value  + dog.getName()+"-"+dog.getBreed();
     }
 }

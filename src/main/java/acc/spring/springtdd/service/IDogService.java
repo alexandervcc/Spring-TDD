@@ -11,4 +11,5 @@ public interface IDogService {
     void deleteDog(Long deleteDog);
     List<Dog> getDogsByBreed(String dogBreed);
     Boolean checkDogAlreadyExists(Dog newDog);
+    String getDogData(Dog dog);
 }
