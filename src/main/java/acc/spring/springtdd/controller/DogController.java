@@ -40,8 +40,7 @@ public class DogController {
     })
     @GetMapping("/{idDog}")
     public ResponseEntity<Dog> getDogById(@PathVariable("idDog") Long idDog){
-        System.out.println("ID: "+idDog);
-        Dog dog = this.dogService.findById(idDog);
+         Dog dog = this.dogService.findById(idDog);
         if(dog==null){
             logger.error("Dog doesnt Found.");
             throw new DogCustomException("Dog does not found, for reading.");
