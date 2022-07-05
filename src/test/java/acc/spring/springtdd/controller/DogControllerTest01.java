@@ -14,11 +14,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -53,7 +56,6 @@ class DogControllerTest01 {
         assertEquals(dogBody.getName(),createExampleDog().getName());
         assertEquals(dogBody.getBreed(),createExampleDog().getBreed());
     }
-
 
     @Test
     public void addNewDogMockMVC() throws Exception {
@@ -172,10 +174,24 @@ class DogControllerTest01 {
             .andExpect(jsonPath("$.name").value(newDog.getName()))
             .andExpect(jsonPath("$.breed").value(newDog.getBreed()))
             .andExpect(jsonPath("$.age").value(newDog.getAge()))   
-        ;
+            .andExpect(MockMvcResultMatchers.content().json("{\"id\":3,\"name\":\"Mijochitos\",\"age\":100,\"breed\":\"Mijotron\"}"))
+            ;
     }
 
 
+    @Test
+    void deleteDogMVC() throws Exception {
+        Dog existingDog = returnCreatedExampleDog();
+        doNothing().when(dogServiceMock).deleteDog(existingDog.getId());
+
+        this.mockMvc.perform(
+            MockMvcRequestBuilders.delete("/api/v1/dog/"+existingDog.getId())
+            .contentType(MediaType.APPLICATION_JSON)
+        )
+            .andDo(print())
+            .andExpect(status().isOk())
+        ;
+    }
 
     //PRIVATES
     private Dog createExampleDog(){

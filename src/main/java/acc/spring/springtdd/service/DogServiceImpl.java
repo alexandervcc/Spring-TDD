@@ -1,6 +1,5 @@
 package acc.spring.springtdd.service;
 
-import acc.spring.springtdd.exceptions.exception.DogCustomException;
 import acc.spring.springtdd.exceptions.exception.DogExistsException;
 import acc.spring.springtdd.model.Dog;
 import acc.spring.springtdd.repository.IDogRepository;
