@@ -18,8 +18,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -76,7 +78,6 @@ class DogControllerTest01 {
         ;
     }
 
-
     @Test
     void getExistingDogById() {
         Dog createdDog = returnCreatedExampleDog();
@@ -85,7 +86,6 @@ class DogControllerTest01 {
         ResponseEntity<?> response = dogController.getDogById(createdDog.getId());
         assertEquals(response.getStatusCode(), HttpStatus.OK);
     }
-
 
     @Test
     void getNOTExistingDogById() {
@@ -104,7 +104,6 @@ class DogControllerTest01 {
         );
 
     }
-
 
     @Test
     void getListOfDogsEmpty(){
@@ -144,6 +143,35 @@ class DogControllerTest01 {
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.length()").value(2))
             .andExpect(jsonPath("$.[0].id").value(3))
+        ;
+    }
+
+    @Test
+    void updateDogkMVC() throws Exception {
+        Dog existingDog = returnCreatedExampleDog();
+        Dog newDog = returnCreatedExampleDog();
+        newDog.setAge(100);
+        newDog.setBreed("Mijotron");
+        newDog.setName("Mijochitos");
+
+        when(dogServiceMock.findById(any())).thenReturn(existingDog);
+        when(dogServiceMock.saveDog(any())).thenReturn(newDog);
+        
+
+        ObjectMapper mapper = new ObjectMapper();
+        String body = mapper.writeValueAsString(newDog);
+
+        this.mockMvc.perform(
+            put("/api/v1/dog/"+existingDog.getId())
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(body) 
+        )
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.id").value(existingDog.getId()))
+            .andExpect(jsonPath("$.name").value(newDog.getName()))
+            .andExpect(jsonPath("$.breed").value(newDog.getBreed()))
+            .andExpect(jsonPath("$.age").value(newDog.getAge()))   
         ;
     }
 
