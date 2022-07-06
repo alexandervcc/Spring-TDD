@@ -19,6 +19,7 @@
     <!-- Profiles Configuration, to run with Maven -->
     <profiles>
         <profile>
+            <!-- The id is the profile name to be used from terminal -->
             <id>dev</id>
             <properties>
                 <!-- This tags is the same as the profile var name at app.properties -->
@@ -28,6 +29,7 @@
             </properties>
         </profile>
         <profile>
+            <id>prod</id>
             <properties>
                 <activatedProfile>
                 prod
