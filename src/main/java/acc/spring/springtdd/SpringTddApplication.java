@@ -1,13 +1,11 @@
 package acc.spring.springtdd;
 
 import acc.spring.springtdd.model.Dog;
-import acc.spring.springtdd.repository.IDogRepository;
 import acc.spring.springtdd.service.IDogService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 @SpringBootApplication
 public class SpringTddApplication  {

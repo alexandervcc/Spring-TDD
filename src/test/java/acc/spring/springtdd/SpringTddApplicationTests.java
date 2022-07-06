@@ -1,13 +1,10 @@
 package acc.spring.springtdd;
 
-import acc.spring.springtdd.controller.DogController;
 import acc.spring.springtdd.model.Dog;
 import acc.spring.springtdd.service.IDogService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.ResponseEntity;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
