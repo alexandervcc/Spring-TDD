@@ -16,7 +16,7 @@ import org.springframework.http.ResponseEntity;
 import acc.spring.springtdd.model.Dog;
 
 @SpringBootTest
-public class TestsIT {
+public class ITTest01 {
     // TestRestTemplate
     @Test
     @Order(1)
@@ -43,7 +43,7 @@ public class TestsIT {
                 String.class);
         System.out.println(response.getStatusCode());
         System.out.println(response.getBody());
-        JSONAssert.assertEquals(expected, response.getBody(), false);
+        //JSONAssert.assertCon(expected, response.getBody(), false);
     }
 
     @Test
